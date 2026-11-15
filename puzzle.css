@@ -1,11 +1,36 @@
-.container {
-    border-color: black;
-    border-radius: 3px;
+.board{
+    border: 1px solid black;
+    height: 150px;
+    width: 150px;
+
 }
 
-div {
-    background-color: aqua;
+.row{
+    display:flex;
 }
-h1 {
-    color: blue;
+
+.piece {
+   border: 1px solid black;
+   height: 50px;
+   width: 50px;
+    overflow:hidden;   
+    position:relative;
+
+    
+
+}
+
+
+#p1 img{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+   
+}
+
+#p2 img{
+    position: absolute;
+    top: 50px;
+    left: 0px;
+   
 }
