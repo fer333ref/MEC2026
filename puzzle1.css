@@ -1,0 +1,70 @@
+.board {
+    border: 1px solid black;
+    aspect-ratio: 1 / 1;
+    height: 50vh;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.piece {
+    border: 1px solid black;
+    box-sizing: border-box;
+    background-image: url("testPhoto1.jpg");
+    background-size: 300% 300%;
+    position: absolute;
+    width: 33.333%;
+    height: 33.333%;
+    cursor: pointer;
+    transition: left 0.15s, top 0.15s;
+}
+
+#p1 {
+    background-position: 0% 0%;
+}
+
+#p2 {
+    background-position: 50% 0%;
+}
+
+#p3 {
+    background-position: 100% 0%;
+}
+
+#p4 {
+    background-position: 0% 50%;
+}
+
+#p5 {
+    background-position: 50% 50%;
+}
+
+#p6 {
+    background-position: 100% 50%;
+}
+
+#p7 {
+    background-position: 0% 100%;
+}
+
+#p8 {
+    background-position: 50% 100%;
+}
+
+#p9 {
+    background-position: 100% 100%;
+}
+
+#p10 {
+    position: absolute;
+    top: 60vh;
+    left: 60vh;
+    height: 16.667vh;
+    aspect-ratio: 1/1;
+    background-size: 100%;
+    background-image: none;
+}
