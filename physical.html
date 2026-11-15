@@ -52,8 +52,6 @@
         #history{
             margin-top: 25px;
         }
-
-        <!--colors-->
         .green{
             background: #74ff89;
         }
@@ -105,15 +103,12 @@
         <ul id="historyList"></ul>
     </div>
 </div>
-
 <script>
-    <!--remember to load the old messages-->
     let records = JSON.parse(localStorage.getItem("astronautRecords") || "[]");
-
-    <!--analyze measurements part-->
+    
     document.getElementById("healthForm").addEventListener("submit", function(event){
         event.preventDefault();
-        const astronaut = document.getElementByID("astronaut").value;
+        const astronaut = document.getElementById("astronaut").value;
         const current = {
             astronaut: astronaut,
             date: new Date().toLocaleDateString(),
@@ -131,20 +126,18 @@
         let status = "GREEN";
         let recommendations = [];
 
-        <!--averages-->
         if (lastSeven.length === 7){
             const average = (field) => lastSeven.reduce((total, record) => total + record[field], 0)/7;
             const baselineHRV = average("hrv");
             const baselineHeartRate = average("heartRate");
             const baselineSleep = average("sleep");
 
-            if(current.hrv < baselineHRV * 0.85){
-                status = "YELLOW";
-                recommendations.push("HRV is lower than your personal baseline.");
-            }
-            if(current.hrv<baselineHRV * 0.75){
+            if(current.hrv < baselineHRV * 0.75){
                 status = "RED";
                 recommendations.push("HRV is significantly lower than your personal baseline.");
+            } else if(current.hrv < baselineHRV * 0.85){
+                status = "YELLOW";
+                recommendations.push("HRV is lower than your personal baseline.");
             }
             if(current.heartRate > baselineHeartRate * 1.15 && status === "GREEN"){
                 status = "YELLOW"
@@ -167,10 +160,10 @@
         }
         if (status === "GREEN"){
             recommendations.push("Readiness looks good. Continue planned resistive training.");
-        }else if (status === "YELLOW"){
+        } else if (status === "YELLOW"){
             recommendations.push("Reduce exercise intensity and consider steady-state cardio.");
         }else{
-            recommendations.push("Priortiize recovery, light mobility, and rest. Seek flight medical team review.");
+            recommendations.push("Prioritize recovery, light mobility, and rest. Seek flight medical team review.");
         }
 
         const result = document.getElementById("result");
@@ -180,15 +173,14 @@
 
         let message = "";
         for (let i = 0; i < recommendations.length; i++){
-            message = message + "<p>" + recommendations[i] + "</p>";        }
+            message = message + "<p>" + recommendations[i] + "</p>";
+        }
         result.innerHTML = "<h2>" + status + " READINESS</h2>" + "<h3>Health Analysis</h3>" + message + "<p>Previous measurements used for baseline: " + lastSeven.length + " of 7</p>";
-
         records.push(current);
         localStorage.setItem("astronautRecords",JSON.stringify(records));
         displayHistory();
-
-        }
-    );
+    }
+);
 
     function displayHistory(){
         const historyList = document.getElementById("historyList");
@@ -200,7 +192,6 @@
         });
     }
     displayHistory();
-
 </script>
 </body>
 </html>
