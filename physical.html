@@ -1,37 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Astronaut Health Monitor</title>
 
     <style>
-        body{
+        body {
             font-family: Arial, sans-serif;
             background: #284a78;
             margin: 0;
             padding: 25px;
             color: #000000;
-        } .container{
+        }
+
+        .container {
             max-width: 700px;
             margin: auto;
             background: white;
             padding: 25px;
             border-radius: 12px;
-        } h1, h2{
+        }
+
+        h1,
+        h2 {
             text-align: center;
-        } label {
+        }
+
+        label {
             display: block;
             margin-top: 15px;
             font-weight: bold;
-        } input {
+        }
+
+        input {
             width: 100%;
             padding: 10px;
             margin-top: 5px;
             box-sizing: border-box;
             border: 1px solid #ccc;
             border-radius: 6px;
-        }button{
+        }
+
+        button {
             width: 100%;
             padding: 12px;
             margin-top: 20px;
@@ -40,170 +52,185 @@
             border: none;
             border-radius: 6px;
             font-size: 16px;
-        }button:hover {
+        }
+
+        button:hover {
             background: #173e7c;
         }
-        #result{
+
+        #result {
             margin-top: 25px;
             padding: 18px;
             border-radius: 8px;
             display: none;
         }
-        #history{
+
+        #history {
             margin-top: 25px;
         }
-        .green{
+
+        .green {
             background: #74ff89;
         }
-        .yellow{
+
+        .yellow {
             background: #ffdd6b;
         }
-        .red{
+
+        .red {
             background: #ff6868;
-        }
-         #back{
-            width: 100px;
-            padding:12px;
-            margin-top: 20px;
-            background: #2457a7;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
         }
     </style>
 </head>
 <!--make sure to do all the listed inputs in the research doc-->
+
 <body>
-      <a href="Log In.html"><button id="back"> Back </button> </a>
-<div class = "container">
-    <h1>Astronaut Health Monitor</h1>
-    <p>Monitor daily health measurements and receive personalized exercises and recovery recommendations.</p>
-    <h2>Daily Measurements</h2>
-    <form id="healthForm">
-        <label>Astronaut ID</label>
-        <input type="text" id="astronaut" required>
+    <div class="container">
+        <h1>Astronaut Health Monitor</h1>
+        <p>Monitor daily health measurements and receive personalized exercises and recovery recommendations.</p>
+        <h2>Daily Measurements</h2>
+        <form id="healthForm">
+            <label>Astronaut ID</label>
+            <input type="text" id="astronaut" required>
 
-        <label>Heart Rate Variability</label>
-        <input type="number" id="hrv" min="1" required>
+            <label>Heart Rate Variability</label>
+            <input type="number" id="hrv" min="1" required>
 
-        <label>Resting Heart Rate</label>
-        <input type="number" id="heartRate" min="1" required>
+            <label>Resting Heart Rate</label>
+            <input type="number" id="heartRate" min="1" required>
 
-        <label>Hours of Sleep</label>
-        <input type="number" id="sleep" min="0" max="24" step="0.1" required>
+            <label>Hours of Sleep</label>
+            <input type="number" id="sleep" min="0" max="24" step="0.1" required>
 
-        <label>Water Intake (litres)</label>
-        <input type="number" id="hydration" min="0" step="0.1" required>
+            <label>Water Intake (litres)</label>
+            <input type="number" id="hydration" min="0" step="0.1" required>
 
-        <label>Muscle Fatigue (0-10)</label>
-        <input type="number" id="fatigue" min="0" max="10" required>
+            <label>Muscle Fatigue (0-10)</label>
+            <input type="number" id="fatigue" min="0" max="10" required>
 
-        <label>Exercise Performance (0-10)</label>
-        <input type="number" id="performance" min="0" max="10" required>
+            <label>Exercise Performance (0-10)</label>
+            <input type="number" id="performance" min="0" max="10" required>
 
-        <label>Days in Space</label>
-        <input type="number" id="days" min="0" required>
+            <label>Days in Space</label>
+            <input type="number" id="days" min="0" required>
 
-        <button type="submit">Analyze Health</button>
-    </form>
+            <button type="submit">Analyze Health</button>
+        </form>
 
-    <div id="result"></div>
-    <div id="history">
-        <h2>Measurement History</h2>
-        <ul id="historyList"></ul>
+        <div id="result"></div>
+        <div id="history">
+            <h2>Measurement History</h2>
+            <pre id="historyList"></pre>
+        </div>
     </div>
-</div>
-<script>
-    let records = JSON.parse(localStorage.getItem("astronautRecords") || "[]");
-    
-    document.getElementById("healthForm").addEventListener("submit", function(event){
-        event.preventDefault();
-        const astronaut = document.getElementById("astronaut").value;
-        const current = {
-            astronaut: astronaut,
-            date: new Date().toLocaleDateString(),
-            hrv: Number(document.getElementById("hrv").value),
-            heartRate: Number(document.getElementById("heartRate").value),
-            sleep: Number(document.getElementById("sleep").value),
-            hydration: Number(document.getElementById("hydration").value),
-            fatigue: Number(document.getElementById("fatigue").value),
-            performance: Number(document.getElementById("performance").value),
-            days: Number(document.getElementById("days").value)
-        };
-        const previous = records.filter(record => record.astronaut === astronaut);
-        const lastSeven = previous.slice(-7);
-        
-        let status = "GREEN";
-        let recommendations = [];
 
-        if (lastSeven.length === 7){
-            const average = (field) => lastSeven.reduce((total, record) => total + record[field], 0)/7;
-            const baselineHRV = average("hrv");
-            const baselineHeartRate = average("heartRate");
-            const baselineSleep = average("sleep");
+    <script src="Firebase.js" type="module">
 
-            if(current.hrv < baselineHRV * 0.75){
+    </script>
+    <script>
+        let records = [];
+
+        document.getElementById("healthForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+            const astronaut = document.getElementById("astronaut").value;
+            const current = {
+                astronaut: astronaut,
+                date: new Date().toLocaleDateString(),
+                hrv: Number(document.getElementById("hrv").value),
+                heartRate: Number(document.getElementById("heartRate").value),
+                sleep: Number(document.getElementById("sleep").value),
+                hydration: Number(document.getElementById("hydration").value),
+                fatigue: Number(document.getElementById("fatigue").value),
+                performance: Number(document.getElementById("performance").value),
+                days: Number(document.getElementById("days").value)
+            };
+            const previous = records.filter(record => record.astronaut === astronaut);
+            const lastSeven = previous.slice(-7);
+
+            let status = "GREEN";
+            let recommendations = [];
+
+            if (lastSeven.length === 7) {
+                const average = (field) => lastSeven.reduce((total, record) => total + record[field], 0) / 7;
+                const baselineHRV = average("hrv");
+                const baselineHeartRate = average("heartRate");
+                const baselineSleep = average("sleep");
+
+                if (current.hrv < baselineHRV * 0.75) {
+                    status = "RED";
+                    recommendations.push("HRV is significantly lower than your personal baseline.");
+                } else if (current.hrv < baselineHRV * 0.85) {
+                    status = "YELLOW";
+                    recommendations.push("HRV is lower than your personal baseline.");
+                }
+                if (current.heartRate > baselineHeartRate * 1.15 && status === "GREEN") {
+                    status = "YELLOW"
+                    recommendations.push("Resting heart rate is higher than your baseline.");
+                }
+                if (current.sleep < baselineSleep * 0.8 && status == "GREEN") {
+                    status = "YELLOW";
+                    recommendations.push("Sleep duration is lower than your baseline.");
+                }
+            } else {
+                recommendations.push("Your personal baseline is still being developed. Continue entering daily measurements.");
+            }
+            if (current.fatigue >= 8) {
                 status = "RED";
-                recommendations.push("HRV is significantly lower than your personal baseline.");
-            } else if(current.hrv < baselineHRV * 0.85){
+            } else if (current.fatigue >= 6 && status === "GREEN") {
                 status = "YELLOW";
-                recommendations.push("HRV is lower than your personal baseline.");
             }
-            if(current.heartRate > baselineHeartRate * 1.15 && status === "GREEN"){
-                status = "YELLOW"
-                recommendations.push("Resting heart rate is higher than your baseline.");
+            if (current.performance <= 3) {
+                status = "RED";
             }
-            if(current.sleep < baselineSleep * 0.8 && status == "GREEN"){
-                status = "YELLOW";
-                recommendations.push("Sleep duration is lower than your baseline.");
+            if (status === "GREEN") {
+                recommendations.push("Readiness looks good. Continue planned resistive training.");
+            } else if (status === "YELLOW") {
+                recommendations.push("Reduce exercise intensity and consider steady-state cardio.");
+            } else {
+                recommendations.push("Prioritize recovery, light mobility, and rest. Seek flight medical team review.");
             }
-        }else{
-            recommendations.push("Your personal baseline is still being developed. Continue entering daily measurements.");
+
+            const result = document.getElementById("result");
+
+            result.style.display = "block";
+            result.className = status.toLowerCase();
+
+            let message = "";
+            for (let i = 0; i < recommendations.length; i++) {
+                message = message + "<p>" + recommendations[i] + "</p>";
+            }
+            result.innerHTML = "<h2>" + status + " READINESS</h2>" + "<h3>Health Analysis</h3>" + message + "<p>Previous measurements used for baseline: " + lastSeven.length + " of 7</p>";
+            records.push(current);
+            WriteRecords({ records });
+            displayHistory();
         }
-        if (current.fatigue >= 8){
-            status = "RED";
-        }else if (current.fatigue >=6 && status === "GREEN"){
-            status = "YELLOW";
-        }
-        if (current.performance <= 3){
-            status = "RED";
-        }
-        if (status === "GREEN"){
-            recommendations.push("Readiness looks good. Continue planned resistive training.");
-        } else if (status === "YELLOW"){
-            recommendations.push("Reduce exercise intensity and consider steady-state cardio.");
-        }else{
-            recommendations.push("Prioritize recovery, light mobility, and rest. Seek flight medical team review.");
+        );
+
+        async function WriteRecords(writeData) {
+            await write(writeData)
+        };
+
+        function displayHistory() {
+            let text = "";
+            records.forEach(record => {
+                text += record.date + "\n";
+                for (const key in record) {
+                    if (key !== "date") { text += key + ": " + record[key] + "\n"; }
+                }
+                text += "\n";
+            });
+            document.getElementById("historyList").textContent = text;
         }
 
-        const result = document.getElementById("result");
-
-        result.style.display = "block";
-        result.className = status.toLowerCase();
-
-        let message = "";
-        for (let i = 0; i < recommendations.length; i++){
-            message = message + "<p>" + recommendations[i] + "</p>";
-        }
-        result.innerHTML = "<h2>" + status + " READINESS</h2>" + "<h3>Health Analysis</h3>" + message + "<p>Previous measurements used for baseline: " + lastSeven.length + " of 7</p>";
-        records.push(current);
-        localStorage.setItem("astronautRecords",JSON.stringify(records));
-        displayHistory();
-    }
-);
-
-    function displayHistory(){
-        const historyList = document.getElementById("historyList");
-        historyList.innerHTML = "";
-        records.forEach(record => {
-            const item = document.createElement("li");
-            item.textContent = record.astronaut + " - " + record.date + " - HRV: " + record.hrv + " ms";
-            historyList.appendChild(item);
+        window.addEventListener("load", async () => {
+            await auth.authStateReady();  // It is ready RAAAAAAAAAAHHHHHHHHHHHH
+            if (!auth.currentUser) return;
+            const data = await read(auth.currentUser.email);
+            records = (data && data.records) ? data.records : [];
+            displayHistory();
         });
-    }
-    displayHistory();
-</script>
-   
+
+    </script>
 </body>
+
 </html>

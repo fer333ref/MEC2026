@@ -5,35 +5,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Astro Monitor</title>
-    <link rel="stylesheet" href="LogIn.css">
-
     <style>
-        body{
+        body {
             font-family: Arial, sans-serif;
             background: #284a78;
             margin: 0;
             padding: 25px;
             color: #000000;
-        } .container{
+        }
+
+        .container {
             max-width: 700px;
             margin: auto;
             background: white;
             padding: 25px;
             border-radius: 12px;
-        } h1, h2 {
+        }
+
+        h1 {
             text-align: center;
-        } label { 
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        label {
             display: block;
             margin-top: 15px;
             font-weight: bold;
-        }input {
+        }
+
+        input {
             width: 100%;
             padding: 10px;
             margin-top: 5px;
             box-sizing: border-box;
             border: 1px solid #ccc;
             border-radius: 6px;
-        } button{
+        }
+
+        button {
             width: 100%;
             padding: 12px;
             margin-top: 20px;
@@ -42,24 +54,24 @@
             border: none;
             border-radius: 6px;
             font-size: 16px;
-        } button:hover{
+        }
+
+        button:hover {
             background: #173e7c;
         }
+
         .choice {
-    display:flex;
-    justify-content: center;
-}
-
-
-     
+            display: flex;
+            justify-content: center;
+        }
     </style>
 </head>
 
 <body>
 
-    <h1>Astro Monitor </h1>
+    <h1>Astro Monitor</h1>
 
-    <div class="logIn"> 
+    <div class="logIn">
 
         <input id="email" type="email" placeholder="Email">
         <input id="password" type="password" placeholder="Password">
@@ -72,43 +84,24 @@
 
     <div class="choice">
         <div id="physical"> <a href="physical.html"><button>Physical Health </button> </a> </div>
-        <div id="mental"> <a href="puzzle1.html"><button> Mental Health </button> </a></div>
+        <div id="mental"> <a href="puzzle.html"><button> Mental Health </button> </a></div>
     </div>
 
+    <script type="module" src="Firebase.js"></script>
+    </script>
+
     <script type="module">
-
-        //Firebase stuff
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged }
-            from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-
-        import { getFirestore, collection, addDoc, getDocs }
-            from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCx7AyRXmxz8Lp0w-c4Be-Z7NH6_2sg9oQ",
-            authDomain: "mec-2026.firebaseapp.com",
-            projectId: "mec-2026",
-            storageBucket: "mec-2026.firebasestorage.app",
-            messagingSenderId: "753030222688",
-            appId: "1:753030222688:web:a0d3f396d04d294632c405",
-            measurementId: "G-PGNC7J7TDQ"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        // end o firbase stuff
-
         //html elements refrences and events
+        import { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged }
+            from "./Firebase.js";
+
         const email = document.getElementById("email");
         const password = document.getElementById("password");
         const status = document.getElementById("status");
 
         const button1 = document.getElementById("physical");
         const button2 = document.getElementById("mental");
-        
+
 
 
         document.getElementById("signUp").onclick = () =>
@@ -121,8 +114,8 @@
 
         onAuthStateChanged(auth, user => {
             status.textContent = user ? "Signed in as " + user.email : "Signed out";
-        
-            if (auth.currentUser == null){
+
+            if (auth.currentUser == null) {
                 button1.hidden = true;
                 button2.hidden = true;
             }
@@ -131,28 +124,6 @@
                 button2.hidden = false;
             }
         });
-
-       
-        
-       
-        window.save = async (data) => {
-            const ref = await addDoc(collection(db, "users", auth.currentUser.uid, "items"), data);
-        };
-
-        window.load = async () => {
-            const snap = await getDocs(collection(db, "users", auth.currentUser.uid, "items"));
-        };
-
-
-
-        /*
-        =========================
-        example write and read
-        =========================
-
-        save({Hope:"Please work"})
-        load()
-        */
     </script>
 </body>
 
