@@ -23,15 +23,19 @@
             background: white;
             padding: 25px;
             border-radius: 12px;
-        } .resultContainer{
+        } #resultContainer{
             width: 300px;
             height: 100px;
             background: white;
             justify-content: center;
+            margin: 0;
         }
-        h1, h2 {
+        h1, h2{
             text-align: center;
-        } label { 
+        } p{
+            font-weight: bold;
+
+        }label { 
             display: block;
             margin-top: 15px;
             font-weight: bold;
@@ -61,8 +65,21 @@
             background: rgb(84, 117, 0);
             
         }
+        #back{
+            width: 100px;
+            padding:12px;
+            margin-top: 20px;
+            background: #2457a7;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+        }
         
     </style>
+    
+   
+     <a href="Log In.html"><button id="back"> Back </button> </a>
     
     <h1> Mental Health Monitor </h1>
     <div id="timer">
@@ -71,7 +88,9 @@
         <div id="sec"> 00</div>
     </div>
 
-    <div class="resultContainer"> 
+ 
+
+    <div class="container" id="resultContainer"> 
         <p id="result"> Result: </p>
     </div>
     

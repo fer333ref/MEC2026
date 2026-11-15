@@ -14,7 +14,7 @@
 .piece {
     border: 1px solid black;
     box-sizing: border-box;
-    background-image: url("testPhoto1.jpg");
+    background-image: url("family.jpg");
     background-size: 300% 300%;
     position: absolute;
     width: 33.333%;
