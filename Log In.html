@@ -16,6 +16,9 @@
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged }
             from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
+        import { getFirestore, collection, addDoc, getDocs }
+            from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
         const firebaseConfig = {
             apiKey: "AIzaSyCx7AyRXmxz8Lp0w-c4Be-Z7NH6_2sg9oQ",
             authDomain: "mec-2026.firebaseapp.com",
@@ -28,8 +31,11 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app);
 
-        // end of firbase stuff
+
+
+        // end o firbase stuff
 
         //html elements refrences and events
         const email = document.getElementById("email");
@@ -47,6 +53,23 @@
         onAuthStateChanged(auth, user => {
             status.textContent = user ? "Signed in as " + user.email : "Signed out";
         });
+
+        window.save = async (data) => {
+            const ref = await addDoc(collection(db, "users", auth.currentUser.uid, "items"), data);
+        };
+
+        window.load = async () => {
+            const snap = await getDocs(collection(db, "users", auth.currentUser.uid, "items"));
+        };
+
+        /*
+        =========================
+        example write and read
+        =========================
+
+        save({Hope:"Please work"})
+        load()
+        */
     </script>
 </body>
 
