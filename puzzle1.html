@@ -9,6 +9,72 @@
 </head>
 
 <body>
+    
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            background: #284a78;
+            margin: 0;
+            padding: 25px;
+            color: #000000;
+        } .container{
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+        } .resultContainer{
+            width: 300px;
+            height: 100px;
+            background: white;
+            justify-content: center;
+        }
+        h1, h2 {
+            text-align: center;
+        } label { 
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        } button{
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background: #2457a7;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+        } button:hover{
+            background: #173e7c;
+        }
+        #timer{
+            display:flex;
+            width: 50px;
+            height: 20px;
+            background: rgb(84, 117, 0);
+            
+        }
+        
+    </style>
+    
+    <h1> Mental Health Monitor </h1>
+    <div id="timer">
+        <div id="min"> 00</div>
+        <div id="min"> :</div>
+        <div id="sec"> 00</div>
+    </div>
+
+    <div class="resultContainer"> 
+        <p id="result"> Result: </p>
+    </div>
+    
     <div class="board">
         <div class="piece" id="p1"></div>
         <div class="piece" id="p2"></div>

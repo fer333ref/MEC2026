@@ -4,6 +4,18 @@ let currentOrder = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+
+//stopwatch 
+let second = 0
+let minute = 0;
+let count = 0;
+let timer = true;
+
+
+//result colours:
+let statColor = "GREEN";
+
+
 //yet to implement
 async function nextScreen() {
     await wait(10000);
@@ -37,8 +49,9 @@ async function AGAIN() {
             piece.style.left = (n % 3) * 33.333333 + "%";
             piece.style.top = Math.floor(n / 3) * 33.333333 + "%";
         }
-        if (intendedOrder == currentOrder) {
+        if (intendedOrder.length == currentOrder.length && intendedOrder.every((val, index) => val === currentOrder[index])) {
             console.log(true);
+            timer = false;
             nextScreen(); //pause for 10 seconds to let them take it in
         } else {
             console.log(false)
@@ -52,5 +65,64 @@ for (let i = 1; i <= 9; i++)
 
 for (let i = 0; i < 200; i++) move(Math.floor(Math.random() * 10));
 AGAIN();
+
+stopWatch();
+
+function stopWatch(){
+    if (timer == true){
+        count ++;
+        if (count == 100){
+            second ++;
+            count = 0;
+        }
+        if (second == 60){
+            minute ++;
+            second = 0;
+        }
+        if (minute == 10){
+            minute++;
+        }
+
+        let min = minute;
+        let sec = second;
+
+        if (min < 10){
+            min = "0" + min;
+        }
+
+        if (sec < 10){
+            sec = "0" + sec;
+        }
+
+        document.getElementById('min').innerHTML = min;
+        document.getElementById('sec').innerHTML = sec;
+
+        setTimeout(stopWatch, 10);
+
+        
+    }       
+
+    if (timer == false){
+        if (minute > 15){
+            document.getElementById('result').innerHTML = "Declining Cognitive Ability";
+
+        }
+        else if (minute > 10){
+
+            document.getElementById('result').innerHTML = "Moderate Cognitive Ability"
+
+        }
+        else {
+
+            document.getElementById('result').innerHTML = "Moderate Cognitive Ability"
+
+        }
+
+    }
+
+
+}
+
+
 
 console.log(currentOrder)
