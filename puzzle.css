@@ -1,0 +1,11 @@
+.container {
+    border-color: black;
+    border-radius: 3px;
+}
+
+div {
+    background-color: aqua;
+}
+h1 {
+    color: blue;
+}
