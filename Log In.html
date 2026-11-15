@@ -1,13 +1,73 @@
 <!DOCTYPE html>
 <html>
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astro Monitor</title>
+    <link rel="stylesheet" href="LogIn.css">
+
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            background: #284a78;
+            margin: 0;
+            padding: 25px;
+            color: #000000;
+        } .container{
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+        } h1, h2 {
+            text-align: center;
+        } label { 
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        } button{
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background: #2457a7;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+        } button:hover{
+            background: #173e7c;
+        }
+     
+    </style>
+</head>
+
 <body>
-    <input id="email" type="email" placeholder="Email">
-    <input id="password" type="password" placeholder="Password">
-    <button id="signUp">Sign up</button>
-    <button id="signIn">Sign in</button>
-    <button id="signOut">Sign out</button>
-    <p id="status"></p>
+
+    <h1>Astro Monitor </h1>
+
+    <div class="logIn"> 
+
+        <input id="email" type="email" placeholder="Email">
+        <input id="password" type="password" placeholder="Password">
+        <button id="signUp">Sign up</button>
+        <button id="signIn">Sign in</button>
+        <button id="signOut">Sign out</button>
+        <p id="status"></p>
+
+    </div>
+
+    <div class="choice">
+        <div id="physical"> <a href="physical.html"><button>Physical Health </button> </a> </div>
+        <div id="mental"> <a href="puzzle.html"><button> Mental Health </button> </a></div>
+    </div>
 
     <script type="module">
 
@@ -33,14 +93,17 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-
-
         // end o firbase stuff
 
         //html elements refrences and events
         const email = document.getElementById("email");
         const password = document.getElementById("password");
         const status = document.getElementById("status");
+
+        const button1 = document.getElementById("physical");
+        const button2 = document.getElementById("mental");
+        
+
 
         document.getElementById("signUp").onclick = () =>
             createUserWithEmailAndPassword(auth, email.value, password.value).catch(e => status.textContent = e.message);
@@ -52,8 +115,20 @@
 
         onAuthStateChanged(auth, user => {
             status.textContent = user ? "Signed in as " + user.email : "Signed out";
+        
+            if (auth.currentUser == null){
+                button1.hidden = true;
+                button2.hidden = true;
+            }
+            else {
+                button1.hidden = false;
+                button2.hidden = false;
+            }
         });
 
+       
+        
+       
         window.save = async (data) => {
             const ref = await addDoc(collection(db, "users", auth.currentUser.uid, "items"), data);
         };
@@ -61,6 +136,8 @@
         window.load = async () => {
             const snap = await getDocs(collection(db, "users", auth.currentUser.uid, "items"));
         };
+
+
 
         /*
         =========================
